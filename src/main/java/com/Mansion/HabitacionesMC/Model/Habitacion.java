@@ -1,5 +1,5 @@
 package com.Mansion.HabitacionesMC.Model;
 
-public class Habitaciom {
+public class Habitacion {
 
 }

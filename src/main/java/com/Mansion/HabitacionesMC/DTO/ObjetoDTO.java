@@ -1,5 +1,5 @@
 package com.Mansion.HabitacionesMC.DTO;
 
-public class Objeto {
+public class ObjetoDTO {
 
 }
