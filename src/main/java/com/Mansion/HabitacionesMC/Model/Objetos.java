@@ -54,4 +54,8 @@ public class Objetos {
         return dto;
     }
 
+    public Long getIdObjeto() {
+        return (this.OBJETObASE != null) ? this.OBJETObASE.getIdObjeto() : null;
+    }
+
 }

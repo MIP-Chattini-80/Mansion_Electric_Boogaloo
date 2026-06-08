@@ -1,5 +1,6 @@
 package com.Mansion.HabitacionesMC.Model;
 
+<<<<<<< HEAD
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,5 +33,8 @@ public class Objeto {
     @NotNull(message = "El valor base debe ser definido")
     @Min(value = 0, message = "El valor base no puede ser negativo")
     private Integer valorBase;
+=======
+public class Objeto {
+>>>>>>> cd062792bd45e68eaeca56e9dbd347117bc7eb86
 
 }
