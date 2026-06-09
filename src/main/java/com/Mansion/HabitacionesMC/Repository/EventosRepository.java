@@ -8,4 +8,6 @@ import com.Mansion.HabitacionesMC.Model.Eventos;
 @Repository
 public interface EventosRepository extends JpaRepository<Eventos, Long> {
     
+    Eventos findByCategoriaIgnoreCase(String categoria);
+    
 }

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import com.Mansion.HabitacionesMC.Model.Eventos;
 import com.Mansion.HabitacionesMC.Repository.EventosRepository;
 
+import jakarta.transaction.Transactional;
+
+@Transactional
 @Service
 public class EventosService {
 
@@ -25,6 +28,24 @@ public class EventosService {
         return eventosRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Instancia de evento no encontrada"));
     }
+
+    public Eventos guardarInstancia(Eventos eventos) {
+        if (eventos == null) {
+            throw new IllegalArgumentException("El objeto Eventos no puede ser nulo.");
+        }
+        if (eventos.getCategoria() == null || eventos.getCategoria().trim().isEmpty()) {
+            throw new IllegalArgumentException("La categoría es estrictamente obligatoria.");
+        }
+        String categoriaSanitizada = eventos.getCategoria().trim().replaceAll("\\s+", " ");
+        Eventos existente = eventosRepository.findByCategoriaIgnoreCase(categoriaSanitizada);
+        if (existente != null) {
+            throw new RuntimeException("Ya existe un registro con la categoría: '" + categoriaSanitizada + "'");
+        } /* Control de dublicados: evita que hayan duplicados de las instancias */
+        eventos.setCategoria(categoriaSanitizada);
+        return eventosRepository.save(eventos);
+    }
+
+    
 
     public void eliminar(Long id) {
         eventosRepository.deleteById(id);

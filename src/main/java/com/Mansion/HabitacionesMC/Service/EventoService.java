@@ -25,16 +25,12 @@ public class EventoService {
                 .collect(Collectors.toList());
     }
 
-    public Evento obtenerPorId(Long id) {
+    public Evento buscarPorId(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("El ID no puede ser nulo.");
         }
         return eventoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ID "+ id + " no está registrado"));
-    }
-
-    public Evento guardarEvento(Evento evento) {
-        return eventoRepository.save(evento);
     }
 
     public EventoDTO completarEvento(Long id) {
@@ -52,7 +48,7 @@ public class EventoService {
         return dto;
     }
 
-    public Evento guardar(Evento evento) {
+    public Evento guardarEvento(Evento evento) {
         if (evento == null) {
             throw new IllegalArgumentException("El objeto Evento no puede ser nulo.");
         }
@@ -70,7 +66,7 @@ public class EventoService {
         return eventoRepository.save(evento);
     }
 
-    public Evento actualizar(Long id, Evento eventoDetalles) {
+    public Evento actualizarEvento(Long id, Evento eventoDetalles) {
         if (id == null || eventoDetalles == null) {
             throw new IllegalArgumentException("El ID o los datos de actualización no pueden ser nulos.");
         }
@@ -89,6 +85,26 @@ public class EventoService {
         eventoExistente.setCompletado(eventoDetalles.isCompletado()); /*Actualizar el estado*/
         return eventoRepository.save(eventoExistente);
     }
+
+    public Evento editarEvento(Long id, Evento datosNuevos) {
+        if (id == null || datosNuevos == null) {
+            throw new IllegalArgumentException("El ID o los datos para editar no pueden ser nulos.");
+        }
+        Evento existente = eventoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No existe el evento con el ID: " + id));
+        if (datosNuevos.getTipoEvento() != null) {
+            existente.setTipoEvento(datosNuevos.getTipoEvento());
+        }
+        if (datosNuevos.getHabitacion() != null) {
+            existente.setHabitacion(datosNuevos.getHabitacion());
+        }
+        if (datosNuevos.getDescripcionEspecifica() != null && !datosNuevos.getDescripcionEspecifica().trim().isEmpty()) {
+            String descLimpia = datosNuevos.getDescripcionEspecifica().trim().replaceAll("\\s+", " ");
+            existente.setDescripcionEspecifica(descLimpia);
+        }
+        existente.setCompletado(datosNuevos.isCompletado());
+        return eventoRepository.save(existente);
+    } /* METODO PARA EL PATCH */
 
     public void eliminar(Long id) {
         if (id == null) {
