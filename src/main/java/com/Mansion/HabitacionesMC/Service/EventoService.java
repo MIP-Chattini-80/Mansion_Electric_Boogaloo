@@ -38,13 +38,14 @@ public class EventoService {
             evento.setCompletado(true);
             return mapToDTO(eventoRepository.save(evento));
         }).orElse(null);
-    }
+    } /* Como dice el nombre: este apartado trata de cambiar el estado de un evento a "Completado" dentro de la base de datos modificando el boolean "isCompletado" */
+
 
     private EventoDTO mapToDTO(Evento evento) {
         EventoDTO dto = new EventoDTO();
         dto.setIdEvento(evento.getIdEvento());
         dto.setDescripcionEspecifica(evento.getDescripcionEspecifica());
-        dto.setCompletado(evento.isCompletado());
+        dto.setCompletado(evento.isCompletado()); // Asignación directa pura
         return dto;
     }
 

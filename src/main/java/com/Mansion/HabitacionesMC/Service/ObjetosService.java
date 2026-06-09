@@ -5,12 +5,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.Mansion.HabitacionesMC.DTO.ObjetosDTO;
 import com.Mansion.HabitacionesMC.Model.Objetos;
 import com.Mansion.HabitacionesMC.Repository.ObjetosRepository;
-
-import jakarta.transaction.Transactional;
 
 @Transactional
 @Service

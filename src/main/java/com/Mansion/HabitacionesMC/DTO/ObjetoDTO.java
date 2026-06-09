@@ -1,5 +1,8 @@
 package com.Mansion.HabitacionesMC.DTO;
 
+import lombok.Data;
+
+@Data
 public class ObjetoDTO {
 
     private Long idObjeto;

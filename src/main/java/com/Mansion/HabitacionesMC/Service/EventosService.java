@@ -45,11 +45,57 @@ public class EventosService {
         return eventosRepository.save(eventos);
     }
 
-    
-
-    public void eliminar(Long id) {
-        eventosRepository.deleteById(id);
+    public Eventos actualizarInstancia(Long id, Eventos datosNuevos) {
+        if (id == null || datosNuevos == null) {
+            throw new IllegalArgumentException("El ID o los datos de actualización no pueden ser nulos.");
+        }
+        if (datosNuevos.getCategoria() == null || datosNuevos.getCategoria().trim().isEmpty()) {
+            throw new IllegalArgumentException("La categoría es obligatoria para una actualización completa (PUT).");
+        }
+        Eventos existente = eventosRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se puede actualizar. La categoría no existe con el ID: " + id));
+        String categoriaSanitizada = datosNuevos.getCategoria().trim().replaceAll("\\s+", " ");
+        if (!existente.getCategoria().equalsIgnoreCase(categoriaSanitizada)) {
+            Eventos duplicado = eventosRepository.findByCategoriaIgnoreCase(categoriaSanitizada);
+            if (duplicado != null) {
+                throw new RuntimeException("Ya existe otra categoría con el nombre: '" + categoriaSanitizada + "'");
+            }
+        }
+        existente.setCategoria(categoriaSanitizada);
+        return eventosRepository.save(existente);
     }
 
+    public Eventos editar(Long id, Eventos datosNuevos) {
+        if (id == null || datosNuevos == null) {
+            throw new IllegalArgumentException("El ID o los datos modificados no pueden ser nulos.");
+        }
+
+        Eventos existente = eventosRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se puede editar. La categoría no existe con el ID: " + id));
+
+        if (datosNuevos.getCategoria() != null && !datosNuevos.getCategoria().trim().isEmpty()) {
+            String categoriaSanitizada = datosNuevos.getCategoria().trim().replaceAll("\\s+", " ");
+            
+            if (!existente.getCategoria().equalsIgnoreCase(categoriaSanitizada)) {
+                Eventos duplicado = eventosRepository.findByCategoriaIgnoreCase(categoriaSanitizada);
+                if (duplicado != null) {
+                    throw new RuntimeException("Ya existe otra categoría con el nombre: '" + categoriaSanitizada + "'");
+                }
+            }
+            existente.setCategoria(categoriaSanitizada);
+        }
+
+        return eventosRepository.save(existente);
+    }
+
+    public void eliminar(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("El ID de la categoría de evento no puede ser nulo.");
+        }
+        if (!eventosRepository.existsById(id)) {
+            throw new RuntimeException("No se puede eliminar. La categoría de evento especificada no existe con el ID: " + id);
+        }
+        eventosRepository.deleteById(id);
+    }
 
 }

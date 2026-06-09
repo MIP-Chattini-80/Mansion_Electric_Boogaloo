@@ -75,25 +75,27 @@ public class ObjetoService {
                 .collect(Collectors.toList());
     }
 
-    public ObjetoDTO guardarObjeto(ObjetoDTO dto) {
-        if (dto == null) throw new IllegalArgumentException("Los datos del objeto no pueden ser nulos.");
-        if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
+    public ObjetoDTO guardarObjeto(Objeto objeto) {
+        if (objeto == null) throw new IllegalArgumentException("Los datos del objeto no pueden ser nulos.");
+        if (objeto.getNombre() == null || objeto.getNombre().trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre del objeto es obligatorio.");
         }
-        // Validaciones extra basadas en tus restricciones @NotBlank y @NotNull del modelo
-        if (dto.getDescripcion() == null || dto.getDescripcion().trim().isEmpty()) {
+        if (objeto.getDescripcion() == null || objeto.getDescripcion().trim().isEmpty()) {
             throw new IllegalArgumentException("La descripción es obligatoria.");
         }
-        if (dto.getValorBase() == null || dto.getValorBase() < 0) {
+        if (objeto.getValorBase() == null || objeto.getValorBase() < 0) {
             throw new IllegalArgumentException("El valor base debe ser definido y no puede ser negativo.");
         }
-        Objeto nuevoObjeto = new Objeto();
-        mapearEntidad(nuevoObjeto, dto);
-        Objeto guardado = objetoRepository.save(nuevoObjeto);
+        objeto.setNombre(objeto.getNombre().trim().replaceAll("\\s+", " "));
+        objeto.setDescripcion(objeto.getDescripcion().trim().replaceAll("\\s+", " "));
+        if (objeto.getTipoObjeto() != null) {
+            objeto.setTipoObjeto(objeto.getTipoObjeto().trim());
+        }
+        Objeto guardado = objetoRepository.save(objeto);
         return mapToDTO(guardado);
     }
 
-    public ObjetoDTO actualizarObjeto(Long id, ObjetoDTO datosNuevos) {
+    public ObjetoDTO actualizarObjeto(Long id, Objeto datosNuevos) {
         if (id == null || datosNuevos == null) {
             throw new IllegalArgumentException("El ID o los datos para actualizar no pueden ser nulos.");
         }
@@ -122,7 +124,7 @@ public class ObjetoService {
         }
         Objeto existente = objetoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No se puede editar. El objeto no existe con el ID: " + id));
-        mapearEntidad(existente, datosNuevos);
+        mapearEntidad(existente, datosNuevos);      
         Objeto actualizado = objetoRepository.save(existente);
         return mapToDTO(actualizado);
     }

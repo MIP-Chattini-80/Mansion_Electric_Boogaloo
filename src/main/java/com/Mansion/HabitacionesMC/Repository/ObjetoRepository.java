@@ -14,5 +14,4 @@ public interface ObjetoRepository extends JpaRepository<Objeto, Long> {
 
     List<Objeto> findByTipoObjeto(String tipoObjeto); /* lista de objetos por tipo */
 
-
 }
