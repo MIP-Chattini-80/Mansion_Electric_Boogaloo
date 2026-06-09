@@ -1,5 +1,7 @@
 package com.Mansion.HabitacionesMC.Model;
 
+import com.Mansion.HabitacionesMC.DTO.PuertaDTO;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,5 +36,18 @@ public class Puerta {
     private Habitacion destino;
 
     private boolean estaBloqueada;
+
+    public PuertaDTO convertirADTO() {
+        PuertaDTO dto = new PuertaDTO();
+        dto.setIdPuerta(this.idPuerta);
+        dto.setEstaBloqueada(this.estaBloqueada);
+        if (this.origen != null) {
+            dto.setIdHabitacionOrigen(this.origen.getIdHabitacion());
+        }
+        if (this.destino != null) {
+            dto.setIdHabitacionDestino(this.destino.getIdHabitacion());
+        }
+        return dto;
+    }
 
 }

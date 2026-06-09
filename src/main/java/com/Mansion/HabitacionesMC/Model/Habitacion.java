@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +25,11 @@ public class Habitacion {
     private Long idHabitacion;
 
     @NotBlank(message = "La habitación debe tener un nombre")
+    @Size(min = 2, max = 50, message = "El nombre de la habitación debe tener entre {min} y {max} caracteres.")
     private String nombre;
 
     @NotBlank(message = "La descripción es necesaria para la ambientación")
+    @Size(min = 10, max = 1000, message = "La descripción de la ambientación debe tener entre {min} y {max} caracteres.")
     private String descripcion;
 
     @Column(name = "es_zona_segura")

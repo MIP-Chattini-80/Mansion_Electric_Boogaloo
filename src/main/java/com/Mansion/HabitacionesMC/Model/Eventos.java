@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class Eventos {
     private Long idEventos;
 
     @NotBlank(message = "Categoria obligatoria")
+    @Size(min = 3, max = 50, message = "La categoría del evento debe tener entre {min} y {max} caracteres")
     private String categoria;
 
     @Min(value = 0, message = "No peude ser negativo")

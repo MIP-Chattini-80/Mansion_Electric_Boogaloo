@@ -5,12 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.Mansion.HabitacionesMC.DTO.ObjetoDTO;
 import com.Mansion.HabitacionesMC.Model.Objeto;
 import com.Mansion.HabitacionesMC.Repository.ObjetoRepository;
 
-import jakarta.transaction.Transactional;
 
 @Transactional
 @Service
@@ -74,8 +74,8 @@ public class ObjetoService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
-    
-    public ObjetoDTO guardar(ObjetoDTO dto) {
+
+    public ObjetoDTO guardarObjeto(ObjetoDTO dto) {
         if (dto == null) throw new IllegalArgumentException("Los datos del objeto no pueden ser nulos.");
         if (dto.getNombre() == null || dto.getNombre().trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre del objeto es obligatorio.");
@@ -93,8 +93,7 @@ public class ObjetoService {
         return mapToDTO(guardado);
     }
 
-    // UPDATE - PUT (Reemplazo completo)
-    public ObjetoDTO actualizar(Long id, ObjetoDTO datosNuevos) {
+    public ObjetoDTO actualizarObjeto(Long id, ObjetoDTO datosNuevos) {
         if (id == null || datosNuevos == null) {
             throw new IllegalArgumentException("El ID o los datos para actualizar no pueden ser nulos.");
         }
@@ -117,7 +116,7 @@ public class ObjetoService {
         return mapToDTO(actualizado);
     }
 
-    public ObjetoDTO editar(Long id, ObjetoDTO datosNuevos) {
+    public ObjetoDTO editarObjeto(Long id, ObjetoDTO datosNuevos) {
         if (id == null || datosNuevos == null) {
             throw new IllegalArgumentException("El ID o los datos para editar no pueden ser nulos.");
         }
@@ -128,7 +127,7 @@ public class ObjetoService {
         return mapToDTO(actualizado);
     }
 
-    public void eliminar(Long id) {
+    public void eliminarObjeto(Long id) {
         if (id == null) throw new IllegalArgumentException("El ID no puede ser nulo.");
         if (!objetoRepository.existsById(id)) {
             throw new RuntimeException("No se puede eliminar. El objeto no existe en la base de datos.");

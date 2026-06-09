@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.Mansion.HabitacionesMC.Model.Eventos;
 import com.Mansion.HabitacionesMC.Repository.EventosRepository;
 
-import jakarta.transaction.Transactional;
 
 @Transactional
 @Service

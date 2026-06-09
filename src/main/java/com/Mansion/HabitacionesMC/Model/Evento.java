@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Evento {
     private Habitacion habitacion;
 
     @NotBlank(message = "Descripción necesaria para contexto")
+    @Size(min = 10, max = 500, message = "La descripción específica debe tener entre {min} y {max} caracteres")
     private String descripcionEspecifica;
 
     private boolean completado;

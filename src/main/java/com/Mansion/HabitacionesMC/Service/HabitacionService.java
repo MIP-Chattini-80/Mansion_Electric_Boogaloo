@@ -5,12 +5,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.Mansion.HabitacionesMC.DTO.HabitacionDTO;
 import com.Mansion.HabitacionesMC.Model.Habitacion;
 import com.Mansion.HabitacionesMC.Repository.HabitacionRepository;
-
-import jakarta.transaction.Transactional;
 
 @Transactional
 @Service
@@ -41,6 +40,17 @@ public class HabitacionService {
         return habitacionRepository.findById(id)
                 .map(this::mapToDTO)
                 .orElseThrow(() -> new RuntimeException("Habitación no encontrada"));
+    }
+
+    public HabitacionDTO buscarPorNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de la habitación a buscar no puede estar vacío.");
+        }
+        Habitacion habitacion = habitacionRepository.findByNombreIgnoreCase(nombre.trim());
+        if (habitacion == null) {
+            throw new RuntimeException("No se encontró ninguna habitación con el nombre: " + nombre);
+        }
+        return mapToDTO(habitacion);
     }
 
     public HabitacionDTO guardarHabitacion(Habitacion habitacion) {
@@ -79,12 +89,11 @@ public class HabitacionService {
                 throw new RuntimeException("No se puede actualizar. Ya existe otra habitación llamada: '" + nuevoNombre + "'");
             }
         }
+        if (datosNuevos.getDescripcion() == null || datosNuevos.getDescripcion().trim().isEmpty()) {
+            throw new IllegalArgumentException("La descripción es requerida y no puede quedar vacía en una actualización completa (PUT).");
+        } 
         habitacionExistente.setNombre(nuevoNombre);
-        if (datosNuevos.getDescripcion() != null) {
-            habitacionExistente.setDescripcion(datosNuevos.getDescripcion().trim().replaceAll("\\s+", " "));
-        } else {
-            habitacionExistente.setDescripcion(null);
-        }
+        habitacionExistente.setDescripcion(datosNuevos.getDescripcion().trim().replaceAll("\\s+", " "));
         habitacionExistente.setEsZonaSegura(datosNuevos.isEsZonaSegura());
         Habitacion actualizada = habitacionRepository.save(habitacionExistente);
         return mapToDTO(actualizada);
